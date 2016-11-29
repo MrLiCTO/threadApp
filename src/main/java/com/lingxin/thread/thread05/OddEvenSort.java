@@ -12,28 +12,15 @@ public class OddEvenSort {
 
     public static void main(String[] args) {
         int[] arr1={
-                2,3,4,345,435,46,3,346,56,345,5678,34,678,344,234,678,789,34,512,78,945,612,568,89,023,68,879,2345,42,6789,890,34,512,36789,12,3
+                2,3,4,345,435,46,3,346,56,345,5678,34,678,344,234,678,789,34,512,78,945,612,568,89,23,68,879,2345,42,6789,890,34,512,36789,12,3
         };
         try {
             OddEvenSortTask.oddEvenSort(arr1);
-            Arrays.stream(arr1).forEach(System.out::print);
+            Arrays.stream(arr1).forEach(System.out::println);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-
-    static int exchFlag=1;
-
-
-    public synchronized static void setExchFlag(int exchFlag) {
-        exchFlag = exchFlag;
-    }
-
-    public synchronized static int getExchFlag() {
-        return exchFlag;
-    }
-
     public static class OddEvenSortTask implements Runnable{
 
         int i;
@@ -41,6 +28,18 @@ public class OddEvenSort {
         CountDownLatch latch;
 
         static int[] arr;
+
+        static int exchFlag=1;
+
+
+        public synchronized static void setExchFlag(int falg) {
+            exchFlag = falg;
+        }
+
+        public synchronized static int getExchFlag() {
+            return exchFlag;
+        }
+
 
         public OddEvenSortTask(int i, CountDownLatch latch) {
             this.i = i;
@@ -64,11 +63,11 @@ public class OddEvenSort {
             ExecutorService pool = Executors.newCachedThreadPool();
             while(getExchFlag()==1||start==1){
                 setExchFlag(0);
-                CountDownLatch countDownLatch=new CountDownLatch(arr.length%2==0?start:0);
+                CountDownLatch countDownLatch=new CountDownLatch(arr.length/2-(arr.length%2==0?start:0));
                 for (int i = start; i < arr.length-1; i+=2) {
                     pool.submit(new OddEvenSortTask(i,countDownLatch));
                 }
-                countDownLatch.countDown();
+                countDownLatch.await();
                 if(start==1){
                     start=0;
                 }else{
