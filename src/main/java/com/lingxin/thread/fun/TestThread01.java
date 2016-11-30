@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread01;
+package com.lingxin.thread.fun;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

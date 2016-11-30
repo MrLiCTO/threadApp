@@ -1,11 +1,8 @@
-package com.lingxin.thread.thread02;
+package com.lingxin.thread.procus;
 
 import java.text.MessageFormat;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Administrator on 2016/11/24.

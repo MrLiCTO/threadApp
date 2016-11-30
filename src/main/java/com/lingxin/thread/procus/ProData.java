@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread02;
+package com.lingxin.thread.procus;
 
 /**
  * Created by Administrator on 2016/11/24.

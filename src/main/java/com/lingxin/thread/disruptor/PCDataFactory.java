@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread03;
+package com.lingxin.thread.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 

@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread05;
+package com.lingxin.thread.sort;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;

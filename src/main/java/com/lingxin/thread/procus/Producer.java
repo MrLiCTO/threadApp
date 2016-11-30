@@ -1,9 +1,8 @@
-package com.lingxin.thread.thread02;
+package com.lingxin.thread.procus;
 
 
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**

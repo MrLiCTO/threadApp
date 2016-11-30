@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread03;
+package com.lingxin.thread.disruptor;
 
 /**
  * Created by Administrator on 2016/11/24.

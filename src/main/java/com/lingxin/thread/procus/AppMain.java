@@ -1,4 +1,4 @@
-package com.lingxin.thread.thread02;
+package com.lingxin.thread.procus;
 
 import java.util.concurrent.*;
 
