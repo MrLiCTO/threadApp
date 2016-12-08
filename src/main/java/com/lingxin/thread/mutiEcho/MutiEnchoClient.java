@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +23,7 @@ public class MutiEnchoClient {
             BufferedReader reader = null;
             try {
                 client = new Socket();
-                client.connect(new InetSocketAddress("localhost", 8000));
+                client.connect(new InetSocketAddress(InetAddress.getLocalHost(), 8000));
                 writer = new PrintWriter(client.getOutputStream(), true);
                 writer.println("hello");
                 writer.println("嗨...");
@@ -53,8 +54,8 @@ public class MutiEnchoClient {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
+        //for (int i = 0; i < 10; i++) {
             tp.execute(new ClientBranch());
-        }
+        //}
     }
 }

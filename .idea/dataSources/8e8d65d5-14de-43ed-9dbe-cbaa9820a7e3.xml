@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - @localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+    <schema id="1" name="cloud_db">
+      <visible>1</visible>
+    </schema>
+    <schema id="2" name="information_schema"/>
+    <schema id="3" name="modelfactory"/>
+    <schema id="4" name="mysql"/>
+    <schema id="5" name="performance_schema"/>
+    <schema id="6" name="sakila"/>
+    <schema id="7" name="sys"/>
+    <schema id="8" name="world"/>
+    <table id="9" parent="1" name="person"/>
+    <column id="10" parent="9" name="id">
+      <mandatory>1</mandatory>
+      <data-type>varchar(32)|0</data-type>
+    </column>
+    <column id="11" parent="9" name="sex">
+      <data-type>varchar(32)|0</data-type>
+    </column>
+    <column id="12" parent="9" name="age">
+      <data-type>decimal(10)|0</data-type>
+    </column>
+    <column id="13" parent="9" name="name">
+      <data-type>varchar(32)|0</data-type>
+    </column>
+    <key id="14" parent="9" name="PRIMARY">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+  </database-model>
+</dataSource>

@@ -1,15 +1,13 @@
 package com.lingxin.thread.nioEncho;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,9 +15,18 @@ import java.util.concurrent.Executors;
  * Created by Administrator on 2016/12/5.
  */
 public class NioEnchoServer {
+
+    public static void main(String[] args) throws Exception{
+        new NioEnchoServer().start();
+    }
+
     private Selector selector;
     private ExecutorService tp = Executors.newCachedThreadPool();
     public static Map<Socket, Long> time_stat = new HashMap<Socket, Long>(10240);
+
+    public void start()throws Exception{
+        startServer();
+    }
 
     private void startServer() throws Exception {
         selector = SelectorProvider.provider().openSelector();
@@ -45,9 +52,9 @@ public class NioEnchoServer {
                     SocketChannel channel = (SocketChannel) sk.channel();
                     if (!time_stat.containsKey(channel.socket()))
                         time_stat.put(channel.socket(), System.currentTimeMillis());
-                    //doRead();
+                    doRead(sk);
                 } else if (sk.isValid() && sk.isWritable()) {
-                    //doWrite();
+                    doWrite(sk);
                     SocketChannel channel = (SocketChannel) sk.channel();
                     e = System.currentTimeMillis();
                     Long l = time_stat.get(channel.socket());
@@ -62,6 +69,7 @@ public class NioEnchoServer {
         SocketChannel clientChannal;
         try {
             clientChannal = ssc.accept();
+            clientChannal.configureBlocking(false);
             SelectionKey clientKey = clientChannal.register(selector, SelectionKey.OP_READ);
             EnchoClient enchoClient = new EnchoClient();
             clientKey.attach(enchoClient);
@@ -74,8 +82,36 @@ public class NioEnchoServer {
         }
     }
 
-    private void doWrite(SelectionKey sk) {
+    private void disconect(SelectionKey sk) {
+        sk.cancel();
+    }
 
+    private void doWrite(SelectionKey sk) {
+        SocketChannel channel=(SocketChannel)sk.channel();
+        EnchoClient enchoClient =(EnchoClient)sk.attachment();
+        LinkedList<ByteBuffer> outq = enchoClient.getOutq();
+
+        ByteBuffer bb=outq.getLast();
+
+        try {
+            int len = channel.write(bb);
+            if (len == -1) {
+                disconect(sk);
+                sk.cancel();
+                return;
+            }
+            if(bb.remaining()==0){
+                outq.removeLast();
+            }
+        } catch (IOException e) {
+            System.out.println("failed write to client...");
+            e.printStackTrace();
+            disconect(sk);
+            sk.cancel();
+        }
+        if (outq.size()==0){
+            sk.interestOps(SelectionKey.OP_READ);
+        }
     }
 
     private void doRead(SelectionKey sk) {
@@ -85,17 +121,18 @@ public class NioEnchoServer {
         try {
             len = channel.read(bb);
             if (len < 0) {
-                //disconect(sk);
+                disconect(sk);
+                sk.cancel();
                 return;
             }
         } catch (Exception e) {
             System.out.println("failed read from client...");
             e.printStackTrace();
-            //disconect(sk);
+            disconect(sk);
             return;
         }
         bb.flip();
-        tp.execute(new HandleMsg(sk,bb));
+        tp.execute(new HandleMsg(sk, bb));
     }
 
     class HandleMsg implements Runnable {
