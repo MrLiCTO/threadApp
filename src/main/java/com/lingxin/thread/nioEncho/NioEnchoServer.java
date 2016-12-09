@@ -97,7 +97,6 @@ public class NioEnchoServer {
             int len = channel.write(bb);
             if (len == -1) {
                 disconect(sk);
-                sk.cancel();
                 return;
             }
             if(bb.remaining()==0){
@@ -107,7 +106,6 @@ public class NioEnchoServer {
             System.out.println("failed write to client...");
             e.printStackTrace();
             disconect(sk);
-            sk.cancel();
         }
         if (outq.size()==0){
             sk.interestOps(SelectionKey.OP_READ);
@@ -122,7 +120,6 @@ public class NioEnchoServer {
             len = channel.read(bb);
             if (len < 0) {
                 disconect(sk);
-                sk.cancel();
                 return;
             }
         } catch (Exception e) {
