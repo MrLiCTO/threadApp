@@ -3,9 +3,9 @@ package com.lingxin.thread.sort;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.LongAccumulator;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 
@@ -19,7 +19,7 @@ public class ShellSort implements Runnable {
         Integer[] arr1 = {
                 2, 3, 4, 345, 435, 46, 3, 346, 56, 345, 5678, 34, 678, 344, 234, 678, 789, 34, 512, 78, 945, 612, 568, 89, 23, 68, 879, 2345, 42, 6789, 890, 34, 512, 36789, 12, 3
         };
-        ArrayList<Integer> list = new ArrayList<>();
+       /* ArrayList<Integer> list = new ArrayList<>();
         Function<Integer[], List<Integer>> fun = arr -> {
             for (Integer a : arr) {
                 if (a % 2 == 0)
@@ -27,9 +27,25 @@ public class ShellSort implements Runnable {
             }
             return list;
         };
-        Function<Integer[], List<Integer>> fun1 = arr->{Arrays.stream(arr).mapToInt(x->x*x).forEach(x->list.add(x)); return list;};
+        Function<Integer[], List<Integer>> fun1 = arr->{Arrays.stream(arr).mapToInt(x->x*x).forEach(x->list.add(x)); return list;};*/
         //shellSort(arr1);
-        Arrays.stream(fun1.apply(arr1).toArray()).forEach(System.out::println);
+        /*CompletableFuture<Integer> stage =CompletableFuture.supplyAsync(() -> 100).thenApply(x -> x * x).thenApply(y -> y / 0).exceptionally(ex -> {
+            System.out.println("hahahahah------------------------------" + ex.getStackTrace() + "hahahahah------------------------------");
+            return 0;
+        });
+        stage.complete(100);
+        try {
+            Integer integer = stage.get();
+            System.out.println(integer);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
+        LongAccumulator accumulator=new LongAccumulator((a,b)->a+b,0);
+        for (int i = 0; i < 4; i++) {
+            accumulator.accumulate(i);
+        }
+        System.out.println(accumulator.get());
+        /*Arrays.stream(fun1.apply(arr1).toArray()).forEach(System.out::println);*/
     }
 
     int i = 0;
